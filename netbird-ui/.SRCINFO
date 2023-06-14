@@ -1,0 +1,22 @@
+pkgbase = netbird-ui
+	pkgdesc = Official GUI for the Netbird client
+	pkgver = 0.21.3
+	pkgrel = 1
+	url = https://netbird.io
+	arch = i686
+	arch = pentium4
+	arch = x86_64
+	arch = arm
+	arch = armv7h
+	arch = armv6h
+	arch = aarch64
+	arch = riscv64
+	license = BSD
+	makedepends = go>=1.20
+	depends = netbird
+	depends = gtk3
+	depends = libayatana-appindicator
+	source = netbird-ui-0.21.3.tar.gz::https://github.com/netbirdio/netbird/archive/refs/tags/v0.21.3.tar.gz
+	sha256sums = 445619e1abc01d5264e739656d2d6f554bfceae92a9d7ded44a65089ba74d047
+
+pkgname = netbird-ui
