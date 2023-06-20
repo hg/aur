@@ -1,0 +1,14 @@
+post_install() {
+	echo ":: To initialize gerrit, see https://gerrit-documentation.storage.googleapis.com/Documentation/$1/index.html"
+	echo ':: To set up gerrit, run:'
+	echo '   sudo su - gerrit'
+	echo '   java -jar /usr/share/java/gerrit/gerrit.war init -d /var/lib/gerrit'
+}
+
+post_upgrade() {
+	echo ":: To upgrade gerrit, see https://gerrit-documentation.storage.googleapis.com/Documentation/$1/index.html"
+	echo ':: To update gerrit, run:'
+	echo '   sudo su - gerrit'
+	echo '   java -jar /usr/share/java/gerrit/gerrit.war init -d /var/lib/gerrit'
+	echo '   java -jar /usr/share/java/gerrit/gerrit.war reindex'
+}
