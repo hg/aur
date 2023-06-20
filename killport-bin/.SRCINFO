@@ -1,0 +1,26 @@
+pkgbase = killport-bin
+	pkgdesc = A command-line tool to easily kill processes running on a specified port.
+	pkgver = 0.8.0
+	pkgrel = 1
+	url = https://github.com/jkfran/killport
+	arch = aarch64
+	arch = x86_64
+	arch = i686
+	arch = armv7h
+	license = MIT
+	depends = glibc
+	depends = gcc-libs
+	provides = killport
+	conflicts = killport
+	source = https://raw.githubusercontent.com/jkfran/killport/70e94827b03f957f799e47af40135ccfd1d97616/LICENSE
+	sha256sums = e023af3d4e0c544d684777de83d21f029df35a8bd60bf93dce2e703334095bf7
+	source_aarch64 = https://github.com/jkfran/killport/releases/download/v0.8.0/killport-aarch64-linux-gnu.tar.gz
+	sha256sums_aarch64 = 713d5b9b38f74785022bb5f1b6e0eb5dbc0c58d29b64d965cd2a2d7692ded9e4
+	source_x86_64 = https://github.com/jkfran/killport/releases/download/v0.8.0/killport-x86_64-linux-gnu.tar.gz
+	sha256sums_x86_64 = 5d5b51673546eebd97279b1c530f8fa0d8319e5f3f29fcb2d1303ad28ac13b7c
+	source_i686 = https://github.com/jkfran/killport/releases/download/v0.8.0/killport-i686-linux-gnu.tar.gz
+	sha256sums_i686 = 164001abb985dc1e656f74966dd4946bda04b741890538c4b1ad7fa611d6cf37
+	source_armv7h = https://github.com/jkfran/killport/releases/download/v0.8.0/killport-armv7-linux-gnueabihf.tar.gz
+	sha256sums_armv7h = 1bc81aab939b781f1cee25caa452ec5c9cbc5abd6f595366229971f16644ebeb
+
+pkgname = killport-bin
