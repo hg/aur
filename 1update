@@ -1,0 +1,61 @@
+#!/bin/bash
+
+set -eu
+
+if [[ $# -ne 1 || -z $1 ]]; then
+  echo >&2 "usage: $0 package_dir"
+  exit 2
+fi
+
+check_cmd() {
+  command -v "$1" &>/dev/null || {
+    echo >&2 "install $2"
+    exit 1
+  }
+}
+
+check_cmd aurpublish aurpublish
+check_cmd updpkgsums pacman-contrib
+
+pkg=$1
+
+cd "$(dirname "$0")"
+
+# Testing functions for some packages (like shpool) leave behind lots of
+# abandoned processes, which are difficult to kill reliably in an automated way
+# without affecting the rest of the system. So let's run the update process in
+# a separate cgroup and let systemd take care of it.
+if [[ -z ${SYSTEMD_EXEC_PID:-} ]]; then
+  exec systemd-run \
+    --user \
+    --pty \
+    --collect \
+    --property TimeoutStopSec=2 \
+    --property WorkingDirectory="$PWD" \
+    --wait \
+    --unit "pkg-$pkg" \
+    "$0" "$pkg"
+fi
+
+cd "$pkg"
+
+edit PKGBUILD
+
+updpkgsums
+
+if grep sums_ PKGBUILD; then
+  grep -oP 'sums_\w+' PKGBUILD |
+    while read -r arch; do
+      CARCH=${arch#sums_} makepkg -srfc
+    done
+else
+  makepkg -srf
+fi
+
+cd -
+
+git restore --staged .
+git add "$pkg"
+git commit --verbose
+
+aurpublish "$pkg"
