@@ -54,7 +54,7 @@ fi
 cd -
 
 git restore --staged .
-git add "$pkg"
+git add --update "$pkg"
 git commit --verbose
 
 aurpublish "$pkg"

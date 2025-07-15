@@ -1,5 +1,8 @@
 *.log
+*.zip
+*.[jwt]ar
 *.tar.*
 /*/pkg/
 /*/src/
+*.t[gz]z
 
