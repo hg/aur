@@ -1,0 +1,5 @@
+[dietlibc]
+source = 'regex'
+url = 'http://www.fefe.de/dietlibc/'
+regex = 'dietlibc-(\d+\.\d+)\.tar\.xz'
+

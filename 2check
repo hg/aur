@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -eu
+
+cd "$(dirname "$0")"
+
+readarray -d '' -t args < <(find . -maxdepth 2 -type f -name .nvchecker.toml -printf '%h\0')
+
+pkgctl version check "${args[@]}"
