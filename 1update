@@ -43,6 +43,8 @@ edit PKGBUILD
 
 updpkgsums
 
+[[ -f .hooks ]] && ./.hooks
+
 if grep sums_ PKGBUILD; then
   while read -r arch; do
     CARCH=${arch#sums_} makepkg -srfc
