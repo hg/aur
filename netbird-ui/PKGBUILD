@@ -1,0 +1,73 @@
+# Maintainer: tarball <bootctl@gmail.com>
+
+pkgname=netbird-ui
+pkgver=0.75.1
+pkgrel=1
+url='https://netbird.io'
+arch=(i686 pentium4 x86_64 arm armv7h armv6h aarch64 riscv64)
+license=('BSD-3-Clause')
+pkgdesc='GUI for the Netbird client'
+depends=(
+  'cairo'
+  'glibc'
+  'gtk4'
+  'libsoup3'
+  'libx11'
+  'netbird'
+  'webkitgtk-6.0'
+)
+makedepends=('go' 'pnpm')
+source=("$pkgname-$pkgver.tar.gz::https://github.com/netbirdio/netbird/archive/refs/tags/v$pkgver.tar.gz")
+sha256sums=('8173f4d38255cc8a9d178cdd45dc577ef2c9066bbbd56e6947b7dccd1b654c2e')
+
+prepare() {
+  cd "$srcdir/netbird-$pkgver"
+
+  # the build process requires a specific alpha version of wails3, so
+  # let's avoid touching global GOPATH
+  export GOPATH="$PWD/gopath"
+  mkdir -p gopath
+  go mod download -x
+
+  cd client/ui/frontend
+  pnpm install --frozen-lockfile --ignore-scripts
+
+  local wails
+  wails=$(go list -m -f '{{.Version}}' github.com/wailsapp/wails/v3)
+  go install github.com/wailsapp/wails/v3/cmd/wails3@"$wails"
+}
+
+build() {
+  export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
+  export CGO_CPPFLAGS="${CPPFLAGS}"
+  export CGO_CFLAGS="${CFLAGS}"
+  export CGO_CXXFLAGS="${CXXFLAGS}"
+  export CGO_LDFLAGS="${LDFLAGS}"
+
+  cd "$srcdir/netbird-$pkgver"
+  export GOPATH="$PWD/gopath"
+
+  (
+    # put our bin first to override global wails, if it exists
+    export PATH="$(go env GOPATH)/bin:$PATH"
+    cd client/ui/frontend
+    pnpm run bindings
+    pnpm run build
+  )
+
+  mkdir -p build
+  go build \
+    -o build \
+    -ldflags "-s -w -linkmode=external -X github.com/netbirdio/netbird/version.version=$pkgver -extldflags \"$LDFLAGS\"" \
+    ./client/ui
+}
+
+package() {
+  cd "$srcdir/netbird-$pkgver"
+  install -Dm755 build/ui "$pkgdir/usr/bin/$pkgname"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+  cd client/ui
+  install -Dm644 assets/netbird.png "$pkgdir/usr/share/pixmaps/netbird.png"
+  install -Dm644 build/linux/netbird.desktop "$pkgdir/usr/share/applications/netbird.desktop"
+}

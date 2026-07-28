@@ -1,0 +1,27 @@
+pkgbase = netbird-ui
+	pkgdesc = GUI for the Netbird client
+	pkgver = 0.75.1
+	pkgrel = 1
+	url = https://netbird.io
+	arch = i686
+	arch = pentium4
+	arch = x86_64
+	arch = arm
+	arch = armv7h
+	arch = armv6h
+	arch = aarch64
+	arch = riscv64
+	license = BSD-3-Clause
+	makedepends = go
+	makedepends = pnpm
+	depends = cairo
+	depends = glibc
+	depends = gtk4
+	depends = libsoup3
+	depends = libx11
+	depends = netbird
+	depends = webkitgtk-6.0
+	source = netbird-ui-0.75.1.tar.gz::https://github.com/netbirdio/netbird/archive/refs/tags/v0.75.1.tar.gz
+	sha256sums = 8173f4d38255cc8a9d178cdd45dc577ef2c9066bbbd56e6947b7dccd1b654c2e
+
+pkgname = netbird-ui
